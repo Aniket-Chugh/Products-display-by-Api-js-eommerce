@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce App</title>
+    <style>
+       * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    justify-content: center;
+    align-items: start;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 250px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+}
+
+.title {
+    font-size: 1.2em;
+    margin: 15px 0;
+    color: #333;
+}
+
+.price {
+    font-size: 1.1em;
+    color: #009688;
+    font-weight: bold;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #ff9800;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #e68900;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container" id="productContainer">
+        <!-- Cards will be appended here dynamically -->
+    </div>
+
+    <script>
+        const productContainer = document.getElementById("productContainer");
+
+        // Function to create a product card
+        function createCard(product) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            card.innerHTML = `
+                <figure>
+                    <img src="${product.image}" alt="${product.title}">
+                </figure>
+                <div class="titleDiv">
+                    <h1 class="title">${product.title}</h1>
+                </div>
+                <div class="priceDiv">
+                    <h3 class="price">${product.price} $</h3>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Fetch product data from API and create cards
+        async function fetchData() {
+            try {
+                const rawResponse = await fetch("https://fakestoreapi.com/products");
+                const data = await rawResponse.json();
+
+
+                const productsToShow = data.slice(0, 20);
+let array = productsToShow;
+
+for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    const card = createCard(element);
+    productContainer.appendChild(card);
+}
+            }
+
+            catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
